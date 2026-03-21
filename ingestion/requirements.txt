@@ -1,0 +1,9 @@
+pdfplumber>=0.11.4
+PyYAML>=6.0.1
+rich>=13.7.0
+pydantic>=2.6.1
+# Optional (for enrichment)
+spacy>=3.7.2
+scispacy>=0.5.4
+# If using scispacy models, install one separately (large download), e.g.:
+# en_core_sci_lg @ https://github.com/allenai/scispacy/releases/download/v0.5.4/en_core_sci_lg-0.5.4-py3-none-any.whl

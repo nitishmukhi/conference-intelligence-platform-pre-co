@@ -1,0 +1,36 @@
+# Ingestion configuration for congress abstract parser
+
+session_prefix:
+  P: Poster
+  O: Oral
+  LB: Late-breaking
+  S: Symposium
+
+# Optional: add congress-specific code patterns (evaluated in order)
+code_patterns:
+  - "^(?P<prefix>P|O|LB|S)-?(?P<num>\d{2,6})\s*$"
+
+# Degree tokens expected near author names (case-insensitive; '.' optional)
+degree_tokens:
+  - MD
+  - PhD
+  - MSc
+  - MS
+  - MPH
+  - FRCP
+  - FRCS
+  - DO
+  - DDS
+  - DMD
+  - RN
+  - NP
+  - PA
+  - PharmD
+
+# Section headers (case-insensitive; trailing ':' optional in input). Order not required.
+section_headers:
+  - Background
+  - Methods
+  - Results
+  - Conclusion
+  - Conclusions
