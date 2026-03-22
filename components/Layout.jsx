@@ -1,188 +1,253 @@
-
-        import React, { useEffect, useState, useMemo } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
-  Input,
+  Avatar,
   Button,
   Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
   DropdownItem,
-  Avatar,
-  Badge,
-  Switch
+  DropdownMenu,
+  DropdownPopover,
+  DropdownTrigger,
+  InputGroup,
+  InputGroupInput,
+  InputGroupPrefix,
+  Switch,
+  SwitchControl,
+  SwitchIcon,
+  SwitchThumb,
 } from "@heroui/react";
 import {
-  HomeIcon,
-  CalendarIcon,
-  MagnifyingGlassIcon,
+  Bars3Icon,
   BellIcon,
+  CalendarIcon,
   ChevronDownIcon,
   Cog6ToothIcon,
-  UserIcon,
+  HomeIcon,
+  MagnifyingGlassIcon,
+  MoonIcon,
   SunIcon,
-  MoonIcon
+  UserIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
-        export default function Layout({ children }) {
-  const location = useLocation();
+
+export default function Layout({ children }) {
   const [isDark, setIsDark] = useState(true);
   const [searchValue, setSearchValue] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-  // initialize theme
-  document.documentElement.removeAttribute('data-theme');
+    document.documentElement.removeAttribute("data-theme");
   }, []);
 
   const handleThemeToggle = (selected) => {
-  setIsDark(selected);
-  if (selected) {
-  document.documentElement.removeAttribute('data-theme');
-  } else {
-  document.documentElement.setAttribute('data-theme', 'light');
-  }
+    setIsDark(selected);
+    if (selected) {
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
   };
 
   const handleSearch = () => {
-  if (searchValue) {
-  // Implement search behavior or route change here if desired
-  console.log('Search:', searchValue);
-  }
+    if (searchValue) {
+      console.log("Search:", searchValue);
+    }
   };
 
-  const onUserMenuAction = (key) => {
-  // surface to parent if needed
-  console.log('UserMenu action:', key);
+  const onUserMenuAction = (id) => {
+    console.log("UserMenu action:", id);
   };
-        return (
-            <div className="min-h-screen w-full bg-[var(--color-background)] text-[var(--color-text)] flex">
-    {/* Sidebar */}
-    <aside className="hidden md:flex md:flex-col md:w-64 lg:w-72 shrink-0 border-r border-[var(--color-border)] bg-[var(--color-surface)]/60 backdrop-blur-md py-6 px-4 gap-6">
-    <div className="flex items-center gap-3 px-2">
-    <div className="w-9 h-9 rounded-xl bg-[var(--color-primary)] flex items-center justify-center shadow-primary">
-    <span className="text-[var(--color-text)] text-sm font-bold">CI</span>
-    </div>
-    <span className="text-[var(--color-text)] font-semibold tracking-tight">Conference Intelligence Platform</span>
-    </div>
-    <nav className="flex-1 flex flex-col gap-1">
-    <NavLink
-      to="/"
-      end
-      className={({ isActive }) => `flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-[var(--color-primary)]/10 transition-colors ${isActive ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : ''}`}
-    >
-    <HomeIcon className="w-5 h-5 text-[var(--color-text)]" />
-    <span className="text-sm text-[var(--color-text)]">Home</span>
-    </NavLink>
-    <NavLink
-      to="/conferences"
-      className={({ isActive }) => `flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-[var(--color-primary)]/10 transition-colors ${isActive ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : ''}`}
-    >
-    <CalendarIcon className="w-5 h-5 text-[var(--color-text)]" />
-    <span className="text-sm text-[var(--color-text)]">Conferences</span>
-    </NavLink>
-    <div className="mt-auto p-3 rounded-xl bg-[var(--color-background)]/60 border border-[var(--color-border)]">
-    <p className="text-xs text-[var(--color-text)]/80">Tip: Use the search bar above to quickly find sessions, speakers, and reports.</p>
-    </div>
-    </nav>
-    </aside>
 
-    {/* Main content wrapper */}
-    <div className="flex-1 flex flex-col min-w-0">
-    {/* Header bar */}
-    <Navbar
-    maxWidth="xl"
-    className="sticky top-0 z-40 bg-[var(--color-background)]/70 backdrop-blur-md border-b border-[var(--color-border)] px-4"
-    >
-    <NavbarContent justify="start" className="gap-2 md:hidden">
-    <NavbarMenuToggle className="text-[var(--color-text)]" />
-    <NavbarBrand>
-    <span className="text-[var(--color-text)] font-semibold">CIP</span>
-    </NavbarBrand>
-    </NavbarContent>
+  const searchField = (
+    <InputGroup className="input-focus-primary h-11 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-background)] px-2">
+      <InputGroupPrefix className="text-[var(--color-text)]">
+        <MagnifyingGlassIcon className="h-4 w-4" />
+      </InputGroupPrefix>
+      <InputGroupInput
+        aria-label="Search"
+        placeholder="Search conferences, items, reports..."
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleSearch();
+        }}
+        className="min-w-0 flex-1 bg-transparent text-[var(--color-text)] placeholder:text-[var(--color-text)]/60 outline-none"
+      />
+    </InputGroup>
+  );
 
-    <NavbarContent justify="start" className="hidden md:flex">
-    <div className="w-80">
-    <Input
-    aria-label="Search"
-    labelPlacement="outside"
-    placeholder="Search conferences, items, reports..."
-    value={searchValue}
-    onValueChange={setSearchValue}
-    classNames={{
-    base: "w-full",
-    inputWrapper: "h-11 bg-[var(--color-background)] border border-[var(--color-border)] rounded-xl input-focus-primary",
-    input: "text-[var(--color-text)] placeholder:text-[var(--color-text)]/60",
-    }}
-    startContent={<MagnifyingGlassIcon className="w-4 h-4 text-[var(--color-text)]" />}
-    onKeyDown={(e)=>{ if(e.key==='Enter'){ handleSearch(); } }}
-    />
+  return (
+    <div className="flex min-h-screen w-full bg-[var(--color-background)] text-[var(--color-text)]">
+      <aside className="hidden shrink-0 flex-col gap-6 border-r border-[var(--color-border)] bg-[var(--color-surface)]/60 px-4 py-6 backdrop-blur-md md:flex md:w-64 lg:w-72">
+        <div className="flex items-center gap-3 px-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--color-primary)] shadow-primary">
+            <span className="text-sm font-bold text-[var(--color-text)]">CI</span>
+          </div>
+          <span className="font-semibold tracking-tight text-[var(--color-text)]">Conference Intelligence Platform</span>
+        </div>
+        <nav className="flex flex-1 flex-col gap-1">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-xl px-3 py-2 transition-colors hover:bg-[var(--color-primary)]/10 ${isActive ? "bg-[var(--color-primary)]/10 text-[var(--color-primary)]" : ""}`
+            }
+          >
+            <HomeIcon className="h-5 w-5 text-[var(--color-text)]" />
+            <span className="text-sm text-[var(--color-text)]">Home</span>
+          </NavLink>
+          <NavLink
+            to="/conferences"
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-xl px-3 py-2 transition-colors hover:bg-[var(--color-primary)]/10 ${isActive ? "bg-[var(--color-primary)]/10 text-[var(--color-primary)]" : ""}`
+            }
+          >
+            <CalendarIcon className="h-5 w-5 text-[var(--color-text)]" />
+            <span className="text-sm text-[var(--color-text)]">Conferences</span>
+          </NavLink>
+          <div className="mt-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-background)]/60 p-3">
+            <p className="text-xs text-[var(--color-text)]/80">
+              Tip: Use the search bar above to quickly find sessions, speakers, and reports.
+            </p>
+          </div>
+        </nav>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-background)]/70 px-4 backdrop-blur-md">
+          <div className="mx-auto flex w-full max-w-screen-xl flex-col gap-2 py-2">
+            <div className="flex w-full flex-wrap items-center gap-2 md:flex-nowrap">
+              <div className="flex flex-1 items-center gap-2 md:hidden">
+                <Button
+                  isIconOnly
+                  aria-expanded={menuOpen}
+                  aria-label={menuOpen ? "Close menu" : "Open menu"}
+                  className="rounded-xl border border-[var(--color-border)] bg-transparent text-[var(--color-text)]"
+                  variant="outline"
+                  onPress={() => setMenuOpen((v) => !v)}
+                >
+                  {menuOpen ? <XMarkIcon className="h-5 w-5" /> : <Bars3Icon className="h-5 w-5" />}
+                </Button>
+                <span className="font-semibold text-[var(--color-text)]">CIP</span>
+              </div>
+
+              <div className="hidden min-w-0 flex-1 md:block md:max-w-md">{searchField}</div>
+
+              <div className="flex w-full shrink-0 items-center justify-end gap-2 md:w-auto md:flex-initial">
+                <Switch isSelected={isDark} onChange={handleThemeToggle} size="sm" className="px-1">
+                  {({ isSelected }) => (
+                    <SwitchControl>
+                      <SwitchThumb>
+                        <SwitchIcon>
+                          {isSelected ? (
+                            <SunIcon className="h-3 w-3 text-[var(--color-text)]" />
+                          ) : (
+                            <MoonIcon className="h-3 w-3 text-[var(--color-text)]" />
+                          )}
+                        </SwitchIcon>
+                      </SwitchThumb>
+                    </SwitchControl>
+                  )}
+                </Switch>
+
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button
+                      isIconOnly
+                      className="relative rounded-xl border border-[var(--color-border)] bg-transparent"
+                      variant="outline"
+                    >
+                      <BellIcon className="h-5 w-5 text-[var(--color-text)]" />
+                      <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-medium text-white">
+                        3
+                      </span>
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownPopover className="rounded-xl">
+                    <DropdownMenu
+                      aria-label="Notifications"
+                      selectionMode="none"
+                      className="min-w-[260px] rounded-xl bg-[var(--color-surface)] p-1 text-[var(--color-text)]"
+                    >
+                      <DropdownItem id="notice-1" className="text-[var(--color-text)]">
+                        3 new conferences added
+                      </DropdownItem>
+                      <DropdownItem id="notice-2" className="text-[var(--color-text)]">
+                        2 items processed
+                      </DropdownItem>
+                      <DropdownItem id="notice-3" className="text-[var(--color-text)]">
+                        Reports generation complete
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </DropdownPopover>
+                </Dropdown>
+
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button className="rounded-xl border border-[var(--color-border)] bg-transparent px-2" variant="outline">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-7 w-7">
+                          <Avatar.Fallback className="text-xs">A</Avatar.Fallback>
+                        </Avatar>
+                        <ChevronDownIcon className="h-4 w-4 text-[var(--color-text)]" />
+                      </div>
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownPopover className="rounded-xl">
+                    <DropdownMenu
+                      aria-label="User menu"
+                      selectionMode="none"
+                      onAction={onUserMenuAction}
+                      className="min-w-[200px] rounded-xl bg-[var(--color-surface)] p-1 text-[var(--color-text)]"
+                    >
+                      <DropdownItem id="profile" className="text-[var(--color-text)]">
+                        <span className="flex items-center gap-2">
+                          <UserIcon className="h-4 w-4" />
+                          Profile
+                        </span>
+                      </DropdownItem>
+                      <DropdownItem id="settings" className="text-[var(--color-text)]">
+                        <span className="flex items-center gap-2">
+                          <Cog6ToothIcon className="h-4 w-4" />
+                          Settings
+                        </span>
+                      </DropdownItem>
+                      <DropdownItem id="logout" variant="danger">
+                        Logout
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </DropdownPopover>
+                </Dropdown>
+              </div>
+            </div>
+
+            {menuOpen ? (
+              <div className="border-t border-[var(--color-border)] pt-3 md:hidden">
+                <div className="mb-3">{searchField}</div>
+                <nav className="flex flex-col gap-2 pb-2">
+                  <NavLink
+                    to="/"
+                    end
+                    className="rounded-lg px-2 py-2 text-[var(--color-text)] hover:bg-[var(--color-primary)]/10"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Home
+                  </NavLink>
+                  <NavLink
+                    to="/conferences"
+                    className="rounded-lg px-2 py-2 text-[var(--color-text)] hover:bg-[var(--color-primary)]/10"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Conferences
+                  </NavLink>
+                </nav>
+              </div>
+            ) : null}
+          </div>
+        </header>
+
+        <main className="min-w-0 flex-1 bg-[var(--color-background)] px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+      </div>
     </div>
-    </NavbarContent>
-
-    <NavbarContent justify="end" className="gap-2">
-    <Switch
-    isSelected={isDark}
-    onValueChange={handleThemeToggle}
-    size="sm"
-    className="px-1"
-    thumbIcon={({isSelected, className}) => (
-    isSelected ? <SunIcon className={`${className} text-[var(--color-text)]`} /> : <MoonIcon className={`${className} text-[var(--color-text)]`} />
-    )}
-    />
-
-    <Dropdown>
-    <DropdownTrigger>
-    <Button isIconOnly className="rounded-xl bg-transparent border border-[var(--color-border)]">
-    <Badge content={3} color="danger">
-    <BellIcon className="w-5 h-5 text-[var(--color-text)]" />
-    </Badge>
-    </Button>
-    </DropdownTrigger>
-    <DropdownMenu aria-label="Notifications" classNames={{ base: "bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl min-w-[260px]" }}>
-    <DropdownItem key="notice-1" className="text-[var(--color-text)]">3 new conferences added</DropdownItem>
-    <DropdownItem key="notice-2" className="text-[var(--color-text)]">2 items processed</DropdownItem>
-    <DropdownItem key="notice-3" className="text-[var(--color-text)]">Reports generation complete</DropdownItem>
-    </DropdownMenu>
-    </Dropdown>
-
-    <Dropdown>
-    <DropdownTrigger>
-    <Button className="rounded-xl bg-transparent border border-[var(--color-border)] px-2">
-    <div className="flex items-center gap-2">
-    <Avatar name="Alex" className="w-7 h-7" />
-    <ChevronDownIcon className="w-4 h-4 text-[var(--color-text)]" />
-    </div>
-    </Button>
-    </DropdownTrigger>
-    <DropdownMenu aria-label="User menu" onAction={onUserMenuAction} classNames={{ base: "bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl min-w-[200px]" }}>
-    <DropdownItem key="profile" startContent={<UserIcon className="w-4 h-4 text-[var(--color-text)]" />}>Profile</DropdownItem>
-    <DropdownItem key="settings" startContent={<Cog6ToothIcon className="w-4 h-4 text-[var(--color-text)]" />}>Settings</DropdownItem>
-    <DropdownItem key="logout" color="danger">Logout</DropdownItem>
-    </DropdownMenu>
-    </Dropdown>
-    </NavbarContent>
-
-    <NavbarMenu className="bg-[var(--color-background)]/80 backdrop-blur-md border-t border-[var(--color-border)]">
-    <NavbarMenuItem>
-    <NavLink to="/" className="text-[var(--color-text)]">Home</NavLink>
-    </NavbarMenuItem>
-    <NavbarMenuItem>
-    <NavLink to="/conferences" className="text-[var(--color-text)]">Conferences</NavLink>
-    </NavbarMenuItem>
-    </NavbarMenu>
-    </Navbar>
-
-    {/* Main content */}
-    <main className="flex-1 w-full min-w-0 px-4 sm:px-6 lg:px-8 py-6 bg-[var(--color-background)]">
-    {children}
-    </main>
-    </div>
-    </div>
-        );
-        }
+  );
+}

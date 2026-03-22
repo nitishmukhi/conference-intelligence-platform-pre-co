@@ -1,43 +1,34 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@heroui/styles/css";
 
-/* Design tokens mapped to CSS variables for global theming */
 :root {
-  /* Brand colors (dark mode default) */
-  --color-primary: #2F5DDE;
-  --color-primary-light: #E7EEFF;
-  --color-secondary: #6E59D9;
-  --color-secondary-light: #ECEBFF;
-  --color-accent: #D97A2B;
-  --color-accent-light: #FFEBD7;
+  --color-primary: #2f5dde;
+  --color-primary-light: #e7eeff;
+  --color-secondary: #6e59d9;
+  --color-secondary-light: #ecebff;
+  --color-accent: #d97a2b;
+  --color-accent-light: #ffebd7;
 
-  /* Neutrals */
-  --color-background: #0E1116; /* deep neutral for dark backgrounds */
-  --color-surface: #1A212B; /* slightly lighter for cards/surfaces */
-  --color-text: #E9EEF3; /* high-contrast light text */
-  --color-border: #2A3440; /* subtle border/divider */
-  --color-ring: #9AA4B2; /* neutral focus ring */
+  --color-background: #0e1116;
+  --color-surface: #1a212b;
+  --color-text: #e9eef3;
+  --color-border: #2a3440;
+  --color-ring: #9aa4b2;
 
-  /* Shadows */
-  --shadow-color: 47, 93, 222; /* RGB of primary color */
+  --shadow-color: 47, 93, 222;
 
-  /* Gradients (generate from assigned brand colors) */
   --gradient-primary-accent: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   --gradient-primary-secondary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
 }
 
-/* Light theme overrides */
-:root[data-theme='light'] {
-  --color-background: #FFFFFF;
-  --color-surface: #F6F8FA;
-  --color-text: #374151; /* darker text for readability */
-  --color-border: #E9EEF3;
+:root[data-theme="light"] {
+  --color-background: #ffffff;
+  --color-surface: #f6f8fa;
+  --color-text: #374151;
+  --color-border: #e9eef3;
   --color-ring: #374151;
 }
 
-/* Global element resets and base styles */
 html,
 body,
 #root {
@@ -51,7 +42,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Global scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
   border-radius: 4px;
@@ -68,7 +58,6 @@ body {
   border-radius: 4px;
 }
 
-/* Utility helpers that may be reused */
 .shadow-primary {
   box-shadow: 0 10px 20px rgba(var(--shadow-color), 0.25);
 }
@@ -78,9 +67,7 @@ body {
   backdrop-filter: blur(10px);
 }
 
-/***** Component tokens *****/
-/**** Inputs ****/
 .input-focus-primary:focus-within {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-primary);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
